@@ -3,6 +3,9 @@ from torch.utils.data import DataLoader
 
 from torch.utils.data import default_collate
 from torchvision.transforms import v2
+import sys
+import os
+
 
 def data_loader():
     
@@ -14,14 +17,20 @@ def data_loader():
         transforms.RandomErasing(p=0.5, scale = (0.02, 0.33), ratio=(0.3, 3.3), value=0, inplace=False),
     ])
 
+    # Get the path to the project root (Go up two levels: src -> Root)
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
+    
+    if project_root not in sys.path:
+        sys.path.append(project_root)
+
     train_dataset = datasets.ImageFolder(
-        root="E:/datasets/tiny_image_net/tiny-imagenet-200/train",
+        root=project_root+"data/tiny-imagenet-200/train",
         transform=transform_train
     )
 
     val_dataset = datasets.ImageFolder(
         #root="E:/datasets/tiny_image_net/tiny-imagenet-200-processed/val",
-        root = "E:/datasets/tiny_image_net/tiny-imagenet-200/val_reorg",
+        root = project_root+'data/tiny-imagenet-200/val',
         transform=transforms.Compose([
             transforms.Resize((96, 96)),  # Resize images to 64x64
             transforms.ToTensor(),
