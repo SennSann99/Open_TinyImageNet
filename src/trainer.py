@@ -4,11 +4,9 @@ import torch.optim as optim
 import torch.nn as nn
 import numpy as np
 
-from utils import torch_seed
 
-def trainer(train_loader, val_loader, train_dataset):
-    from model import VGG_16_v6
-    from utils import torch_seed, fit
+def trainer(model, train_loader, val_loader, train_dataset):
+    from src.utils import torch_seed, fit
     
     # デバイスの割り当て
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -17,10 +15,8 @@ def trainer(train_loader, val_loader, train_dataset):
     # 乱数初期化
     torch_seed()
 
-    n_output = len(train_dataset.classes)  # 出力クラス数
-
-    # モデルインスタンス生成
-    net = VGG_16_v6(n_output).to(device)
+    # モデルをデバイスに移動
+    net = model.to(device)
 
     # 損失関数： 交差エントロピー関数
     criterion = nn.CrossEntropyLoss()

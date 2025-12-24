@@ -1,7 +1,7 @@
-from src.model import MyCNN
-from src.data_loader import get_loaders
-from src.trainer import Trainer
-import yaml
+from src.model import VGG_16_v6 as MyCNN
+from src.data_loader import data_loader
+from src.trainer import trainer
+#import yaml
 
 def main():
     # 1. Load Config
@@ -9,10 +9,8 @@ def main():
     #    config = yaml.safe_load(f)
     # 2. Setup Data
     #train_loader, val_loader, train_dataset = get_loaders(config)
-    train_loader, val_loader, train_dataset = get_loaders()
+    train_loader, val_loader, train_dataset = data_loader()
     # 3. Initialize Model
     model = MyCNN(num_classes=len(train_dataset.classes))
-    #trainer = Trainer(model, train_loader, val_loader, config)
-    trainer = Trainer(model, train_loader, val_loader)
-    # 4. trainer.fit()
-    trainer.train()
+    # 4. Train the model
+    trainer(model, train_loader, val_loader, train_dataset)
